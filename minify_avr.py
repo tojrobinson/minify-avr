@@ -9,7 +9,6 @@ if len(sys.argv) < 2:
 symbols = string.ascii_lowercase
 i = 0
 conflict = ''
-
 mappings = {}
 first_pass = []
 
@@ -19,7 +18,7 @@ with open(sys.argv[1], 'r') as fd:
       if not line or line[0] == ';':
          continue
 
-      if re.search(r'^\.(?:def|equ)', line):
+      if re.search(r'^\.(?:def|equ|macro)', line):
          parts = re.search(r'([^ ]+\s+)([^ ]+)(.*)', line)
          prefix = parts.group(1)
          token = parts.group(2)
