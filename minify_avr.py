@@ -6,8 +6,9 @@ if len(sys.argv) < 2:
    print 'must provide .asm input file'
    sys.exit(1)
 
-symbols = string.ascii_lowercase + string.digits
+symbols = string.ascii_lowercase
 i = 0
+conflict = ''
 
 mappings = {}
 first_pass = []
@@ -22,12 +23,12 @@ with open(sys.argv[1], 'r') as fd:
          parts = re.search(r'([^ ]+\s+)([^ ]+)(.*)', line)
          prefix = parts.group(1)
          token = parts.group(2)
-         suffix = parts.group(3)
+         suffix = conflict + parts.group(3)
       elif re.search(r'^[^ :]+:', line):
          parts = re.search(r'(^[^ :]+)(:.*)', line)
          prefix = ''
          token = parts.group(1)
-         suffix = parts.group(2)
+         suffix = conflict + parts.group(2)
       else:
          token = None
 
@@ -39,6 +40,10 @@ with open(sys.argv[1], 'r') as fd:
             mappings[token] = symbols[i]
             line = prefix + symbols[i] + suffix
             i += 1
+
+            if i == len(symbols):
+               i = 0
+               conflict += '_'
 
          if prefix == '' and len(suffix) == 1:
             line = line + ' '
