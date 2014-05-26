@@ -36,7 +36,7 @@ with open(sys.argv[1], 'r') as fd:
          if s:
             line = prefix + s + suffix
          else:
-            mappings[token] = symbols[i]
+            mappings[token] = symbols[i] + conflict
             line = prefix + symbols[i] + suffix
             i += 1
 
@@ -45,9 +45,9 @@ with open(sys.argv[1], 'r') as fd:
                conflict += '_'
 
          if prefix == '' and len(suffix) == 1:
-            line = line + ' '
             first_pass.append(line)
             continue
+
       first_pass.append(line + '\n')
 
 with open('out.asm', 'w+') as fd:
@@ -61,4 +61,5 @@ with open('out.asm', 'w+') as fd:
 
       if parts:
          line = parts.group(1) + ' ' + re.sub(r' *', '', parts.group(2)) + '\n'
+
       fd.write(line)

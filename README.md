@@ -1,1 +1,1 @@
-AVR assembly minifier
+AVR assembly code compressor/minifier -  totally useful.
