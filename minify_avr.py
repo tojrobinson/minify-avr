@@ -6,7 +6,7 @@ if len(sys.argv) < 2:
    print 'must provide .asm input file'
    sys.exit(1)
 
-symbols = string.ascii_lowercase
+symbols = 'abcdefghijklmnopqrstuvw_'
 i = 0
 conflict = ''
 mappings = {}
