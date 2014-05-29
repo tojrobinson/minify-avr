@@ -15,19 +15,20 @@ first_pass = []
 with open(sys.argv[1], 'r') as fd:
    for line in fd:
       line = line.strip().lower()
-      if not line or line[0] == ';':
+      line = re.sub(r'(?:;|//).*$', '', line)
+      if not line:
          continue
 
       if re.search(r'^\.(?:def|equ|macro)', line):
          parts = re.search(r'([^ ]+\s+)([^ ]+)(.*)', line)
          prefix = parts.group(1)
          token = parts.group(2)
-         suffix = conflict + parts.group(3)
+         suffix = parts.group(3)
       elif re.search(r'^[^ :]+:', line):
          parts = re.search(r'(^[^ :]+)(:.*)', line)
          prefix = ''
          token = parts.group(1)
-         suffix = conflict + parts.group(2)
+         suffix = parts.group(2)
       else:
          token = None
 
@@ -37,14 +38,14 @@ with open(sys.argv[1], 'r') as fd:
             line = prefix + s + suffix
          else:
             mappings[token] = symbols[i] + conflict
-            line = prefix + symbols[i] + suffix
+            line = prefix + symbols[i] + conflict + suffix
             i += 1
 
             if i == len(symbols):
                i = 0
                conflict += '_'
 
-         if prefix == '' and len(suffix) == 1:
+         if prefix == '' and len(suffix) < 2:
             first_pass.append(line)
             continue
 
